@@ -1,0 +1,8 @@
+/RC5
+/variants_727-7z~
+*.PNG
+variants_727-7z
+*.pdf
+*/Debug
+*/Release
+*/.vs
