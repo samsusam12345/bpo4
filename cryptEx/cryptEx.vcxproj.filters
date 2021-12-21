@@ -18,15 +18,15 @@
     <ClCompile Include="cryptEx.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="..\RC5\RC5.cpp">
+    <ClCompile Include="..\bpo4\RC5.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\RC5\RC5_Prefs.h">
+    <ClInclude Include="..\bpo4\RC5.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="..\bpo4\RC5.h">
+    <ClInclude Include="..\bpo4\RC5_Prefs.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

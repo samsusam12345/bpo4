@@ -36,6 +36,7 @@ int main(int argc, char **argv)
     data.resize(fileSize);
     ifn.seekg(0, std::ios::beg);
     ifn.read((char*)&data[0], fileSize);
+    ifn.close();
 
     int start_of_function = seek_label(data, 0x11, 0) + 5;
     int end_of_function = seek_label(data, 0x22, start_of_function);
@@ -43,18 +44,36 @@ int main(int argc, char **argv)
 
     for (int i = 0; i < length_of_function; i += 2 * sizeof(DWORD))
     {
-        DWORD buffer[2] = { *(DWORD*)&data + start_of_function + i, *(DWORD*)&data + start_of_function + i * sizeof(DWORD)};
+        DWORD buffer[2] = { *(DWORD*)&data[start_of_function + i], *(DWORD*)&data[start_of_function + i + sizeof(DWORD)]};
         RC5_encrypt(buffer);
-        for (int j = 0; j < 8; j++)
-        {
-            unsigned char byte = *(unsigned char*)&buffer + j;
-            data[start_of_function + j] = byte;
-        }
+        std::memcpy(&data[start_of_function + i], &buffer, sizeof(buffer));
+
     }
 
-    std::ofstream ofn(fileName, std::fstream::binary);
-    ofn.write(reinterpret_cast<const char*>(&data[0]), data.size() * sizeof(char));
+    std::ofstream ofn(fileName, std::ios::binary);
+    int s = data.size();
+    ofn.write((char*)&data[0], data.size());
     printf("%s encrypted.\n", fileName);
+
+    /*
+    std::vector<unsigned char> _data(10240);
+    std::ifstream _ifn(fileName, std::ios::binary);
+    if (!_ifn)
+    {
+        printf("Couldn't open file %s\n", fileName);
+        exit(-1);
+    }
+    _ifn.seekg(0, std::ios::end);
+    int _fileSize = _ifn.tellg();
+    _data.resize(_fileSize);
+    _ifn.seekg(0, std::ios::beg);
+    _ifn.read((char*)&_data[0], _fileSize);
+    _ifn.close();
+
+    int _start_of_function = seek_label(_data, 0x11, 0) + 5;
+    int _end_of_function = seek_label(_data, 0x22, _start_of_function);
+    int _length_of_function = _end_of_function - _start_of_function;
+    */
     return 0;
 
 }
