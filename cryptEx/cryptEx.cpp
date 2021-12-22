@@ -42,10 +42,14 @@ int main(int argc, char **argv)
     int end_of_function = seek_label(data, 0x22, start_of_function);
     int length_of_function = end_of_function - start_of_function;
 
+    RC5_Init();
+
     for (int i = 0; i < length_of_function; i += 2 * sizeof(DWORD))
     {
+        //3348140176    8115269
         DWORD buffer[2] = { *(DWORD*)&data[start_of_function + i], *(DWORD*)&data[start_of_function + i + sizeof(DWORD)]};
         RC5_encrypt(buffer);
+        //2672322386    348134176
         std::memcpy(&data[start_of_function + i], &buffer, sizeof(buffer));
 
     }
@@ -54,7 +58,7 @@ int main(int argc, char **argv)
     int s = data.size();
     ofn.write((char*)&data[0], data.size());
     printf("%s encrypted.\n", fileName);
-
+    system("pause");
     /*
     std::vector<unsigned char> _data(10240);
     std::ifstream _ifn(fileName, std::ios::binary);
